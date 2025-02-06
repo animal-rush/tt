@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>تایید ایمیل</title>
+    <title>تأیید ایمیل</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -27,34 +27,53 @@
         button:hover {
             background-color: #45a049;
         }
+        #codeForm {
+            display: none;
+        }
     </style>
 </head>
 <body>
 
-    <h1>ورود ایمیل و کد تایید</h1>
+    <h1>ورود ایمیل</h1>
     <form id="emailForm">
         <label for="email">ایمیل خود را وارد کنید:</label><br>
-        <input type="email" id="email" name="email" placeholder="eshagh@hh.vo" required><br><br>
-        <button type="submit">ارسال کد تایید</button>
+        <input type="email" id="email" name="email" required><br><br>
+        <button type="submit">ادامه</button>
     </form>
 
-    <div id="codeSection" style="display: none;">
-        <h3>کد تایید:</h3>
-        <p id="code"></p>
-    </div>
+    <form id="codeForm">
+        <label for="code">کد تأیید را وارد کنید:</label><br>
+        <input type="text" id="code" name="code" maxlength="5" required><br><br>
+        <button type="submit">تایید</button>
+    </form>
+
+    <div id="message" style="font-size: 18px; margin-top: 20px;"></div>
 
     <script>
+        let secretCode = Math.floor(10000 + Math.random() * 90000); // تولید کد تصادفی پنج‌رقمی
+        console.log("کد مخفی: " + secretCode); // این را فقط برای تست در کنسول ببینید
+
         document.getElementById('emailForm').addEventListener('submit', function(event) {
             event.preventDefault();
-            var email = document.getElementById('email').value;
-            var correctEmail = "eshagh@hh.vo";
-            var verificationCode = "65402";
-            
-            if (email === correctEmail) {
-                document.getElementById('codeSection').style.display = "block";
-                document.getElementById('code').textContent = verificationCode;
+            let email = document.getElementById('email').value;
+
+            if (email) {
+                document.getElementById('emailForm').style.display = "none"; 
+                document.getElementById('codeForm').style.display = "block";
+            }
+        });
+
+        document.getElementById('codeForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            let userCode = document.getElementById('code').value;
+
+            if (userCode == secretCode) {
+                document.getElementById('message').style.color = "green";
+                document.getElementById('message').innerText = "🎉 آفرین! شما وارد شدید!";
+                document.getElementById('codeForm').style.display = "none";
             } else {
-                alert("ایمیل وارد شده صحیح نیست!");
+                document.getElementById('message').style.color = "red";
+                document.getElementById('message').innerText = "❌ کد اشتباه است! دوباره امتحان کنید.";
             }
         });
     </script>
